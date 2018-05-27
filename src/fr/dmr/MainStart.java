@@ -1,7 +1,5 @@
 package fr.dmr;
 
-import java.util.List;
-
 /**
  * MainStart
  */
@@ -17,54 +15,51 @@ public class MainStart {
 
 		// Call method to test
 		final MainStart main = new MainStart();
-		String finalPostion = "";
 		try {
-			finalPostion = main.run(instructions);
+			main.run(instructions);
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
 
-		System.out.println(finalPostion);
 	}
 
 	/**
 	 * Run the program
 	 * 
-	 * @return the final positions
 	 * @throws Exception
 	 */
 	public String run(final String instructions) throws Exception {
-		/** Run the first Mower */
-		String finalPosition = runMower(instructions, 1, 2) + "\n" + runMower(instructions, 3, 4);
-		return finalPosition;
+		StringBuilder builder = new StringBuilder();
+		String[] tabInstruction = instructions.split("\n");
+		int i = 1;
+		while(tabInstruction.length > i) {
+			String resultMower = runMower(tabInstruction[i], tabInstruction[i + 1]);
+			if (i == tabInstruction.length - 2) {
+				builder.append(resultMower);
+			} else {
+				builder.append(resultMower + "\n");
+			}
+			System.out.println(resultMower);
+			i += 2;
+		}
+		return builder.toString();
 	}
 
 	/**
-	 * RunMower
-	 * 
+	 * Run mower
+	 * @param initialPosition
 	 * @param instructions
-	 * @return the final Position
-	 * @throws Exception
+	 * @return the mower informations
 	 */
-	private String runMower(final String instructions, final int indexInitialPosition, final int indexInstruction)
-			throws Exception {
-		// Get instructions list
-		final GestionInstructions gInstructions = new GestionInstructions();
-		final List<String> listInstructions = gInstructions.parse(instructions);
-
+	private String runMower(String initialPosition, String instructions) {
 		// Get initial position
-		final String[] positions = gInstructions.getInitialPosition(listInstructions.get(indexInitialPosition));
-
-		if (positions.length != 3) {
-			throw new Exception("There some missing informations about positions");
-		}
-
+		final GestionInstructions gInstructions = new GestionInstructions();
+		final String[] positions = gInstructions.getInitialPosition(initialPosition);
+		
+		// Start Mower
 		final Mower mower = new Mower(Integer.valueOf(positions[0]), Integer.valueOf(positions[1]), positions[2]);
-		mower.startMower(listInstructions.get(indexInstruction));
-
-		final String finalPositionMower = mower.getPositionX() + " " + mower.getPositionY() + " "
-				+ mower.getOrientation();
-		return finalPositionMower;
+		mower.startMower(instructions);
+		return mower.toString();
 	}
 
 }

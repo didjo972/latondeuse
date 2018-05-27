@@ -25,7 +25,6 @@ public class MainStartTest {
 
 		// Assertions
 		Assert.assertEquals("1 3 N\n5 1 E", finalPostion);
-		System.out.println(finalPostion);
 	}
 
 }

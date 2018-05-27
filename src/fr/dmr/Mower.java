@@ -168,5 +168,10 @@ public class Mower {
 			break;
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return this.positionX + " " + this.positionY + " " + this.orientation;
+	}
 
 }
